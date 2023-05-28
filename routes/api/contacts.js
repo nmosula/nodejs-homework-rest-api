@@ -6,16 +6,16 @@ const contactsController = require('../../controllers/contacts-controllers');
 
 const schemas = require("../../schemas/contacts-schemas");
 
-const { validateBody } = require("../../decorators");
+const { validateBody } = require("../../utils");
 
 router.get('/', contactsController.getAllContacts);
 
-router.get('/:contactId', contactsController.getContactById);
+// router.get('/:contactId', contactsController.getContactById);
 
-router.post('/', validateBody(schemas.contactAddSchema), contactsController.addContact);
+// router.post('/', validateBody(schemas.contactAddSchema), contactsController.addContact);
 
-router.put('/:contactId', validateBody(schemas.contactAddSchema), contactsController.updateContactById);
+// router.put('/:contactId', validateBody(schemas.contactAddSchema), contactsController.updateContactById);
 
-router.delete('/:contactId', contactsController.deleteContactById);
+// router.delete('/:contactId', contactsController.deleteContactById);
 
 module.exports = router
