@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { users: usersController } = require("../../controllers");
+const { users: usersControllers } = require("../../controllers");
 
 const { authenticate } = require("../../middlewares");
 
@@ -12,13 +12,13 @@ const { validateBody } = require("../../utils");
 
 
 // signup
-router.post("/register", validateBody(schemas.userRegisterSchema), usersController.register);
+router.post("/register", validateBody(schemas.userRegisterSchema), usersControllers.register);
 
 // // signin
-router.post("/login", validateBody(schemas.userLoginSchema), usersController.login);
+router.post("/login", validateBody(schemas.userLoginSchema), usersControllers.login);
 
-// router.get("/current", authenticate, authControllers.getCurrent);
+router.get("/current", authenticate, usersControllers.getCurrent);
 
-router.post("/logout", authenticate, usersController.logout);
+router.post("/logout", authenticate, usersControllers.logout);
 
 module.exports = router;
