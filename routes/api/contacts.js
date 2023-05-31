@@ -7,7 +7,9 @@ const { contacts: contactsController } = require("../../controllers");
 const { schemas } = require("../../models/contact");
 
 const { validateBody } = require("../../utils");
-const { isValidId } = require('../../middlewares');
+const { isValidId, authenticate } = require('../../middlewares');
+
+router.use(authenticate);
 
 router.get('/', contactsController.getAllContacts);
 
