@@ -5,7 +5,6 @@ const { HttpError } = require("../helpers");
 
 const tmpPath = path.join(__dirname, "../", "tmp");
 
-console.log("tmpPath=", tmpPath);
 
 const storage = multer.diskStorage({
     destination: tmpPath,
@@ -23,9 +22,10 @@ const limits = {
 const fileFilter = (req, file, cb) => {
     const { mimetype } = file;
 
-    if (mimetype !== "image/jpeg" || mimetype !== "image/png") {
-        cb(HttpError(400, "File can have only .jpg or .png extension"), false)
+    if (mimetype !== "image/jpeg") {
+        cb(HttpError(400, "File can have only .jpg extension"), false)
     }
+
     cb(null, true);
 }
 
