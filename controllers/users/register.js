@@ -2,22 +2,45 @@ const bcrypt = require("bcrypt");
 
 const gravatar = require("gravatar");
 
-const { HttpError } = require("../../helpers");
+const { HttpError, sendEmail } = require("../../helpers");
 
 const { User } = require("../../models/user");
+const { nanoid } = require("nanoid");
 
 const register = async (req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email});
+    const {
+        email,
+        password,
+        subscription = "starter",
+        verify = false,
+    } = req.body;
+
+    const user = await User.findOne({ email });
+    
     if(user) {
         throw HttpError(409, "Email already exist");
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const verificationCode = nanoid();
 
     const avatarURL = gravatar.url(email, { protocol: "http", s: "250" });
 
-    const result = await User.create({...req.body, password: hashPassword, avatarURL});
+    const result = await User.create({
+        ...req.body,
+        password: hashPassword,
+        subscription,
+        avatarURL,
+        verificationCode
+    });
+
+    const verifyEmail = {
+        to: email,
+        subject: "Verify email",
+        html: `<a target="_blank" href="http://localhost:3000/users/verify/${verificationCode}">Click to verify email</a>`
+    };
+
+    await sendEmail(verifyEmail);
 
     res.status(201).json({
         user: {
